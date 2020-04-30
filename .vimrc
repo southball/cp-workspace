@@ -98,4 +98,14 @@ function Reset()
 endfunction
 
 " Ctrl-P settings
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
 
+" set files to open in new tab automatically
+let g:ctrlp_prompt_mappings = {
+	\ 'AcceptSelection("e")': ['<2-LeftMouse>'],
+	\ 'AcceptSelection("t")': ['<cr>'],
+	\ }
+
+set runtimepath^=~/.vim/bundle/ctrlp.vim
