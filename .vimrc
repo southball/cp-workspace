@@ -15,7 +15,8 @@ nnoremap <C-Right> :tabnext<CR>
 
 nnoremap <F5> :exec Run()<CR>
 nnoremap <F6> :exec RunInteractive()<CR>
-nnoremap <F7> :exec OpenRes()<CR><CR>
+nnoremap <F7> :exec OpenRes()<CR>
+nnoremap <C-F7> :exec CloseRes()<CR>
 nnoremap <C-F11> :exec Reset()<CR><CR>
 nnoremap <F12> :!cat % \| clip.exe<CR><CR>
 
@@ -51,11 +52,37 @@ function OpenRes()
 		echo "The current tab is not a .cpp file."
 		return
 	endif
-	
+
+	let orgtab = tabpagenr()
+
 	execute "tabedit res/" . file . ".in"
 	execute "tabedit res/" . file . ".out"
 	execute "tabedit res/" . file . ".ans"
 	execute "tabedit res/" . file . ".log"
+
+	execute "tabn" orgtab
+endfunction
+
+function CloseRes()
+	let file = expand('%:t:r')
+	let extension = expand('%:e')
+
+	if extension !=? "cpp"
+		echo "The current tab is not a .cpp file."
+		return
+	endif
+
+	let tabs = tabpagenr("$")
+	let patterns = ["res/" . file . ".in", "res/" . file . ".out", "res/" . file . ".ans", "res/" . file . ".log"]
+
+	for i in range(tabs, 1, -1)
+		let buf = bufname(tabpagebuflist(i)[0])
+		for pat in patterns
+			if buf =~ pat
+				execute "tabclose" i
+			endif
+		endfor
+	endfor
 endfunction
 
 function Reset()
