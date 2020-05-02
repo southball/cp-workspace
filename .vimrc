@@ -29,7 +29,7 @@ function Run()
 		return
 	endif
 
-	execute "!./run.sh" file
+	execute "!./scripts/run.sh" file
 endfunction
 
 function RunInteractive()
@@ -41,7 +41,7 @@ function RunInteractive()
 		return
 	endif
 
-	execute "!./run_interactive.sh" file
+	execute "!./scripts/run_interactive.sh" file
 endfunction
 
 function OpenRes()
@@ -94,7 +94,7 @@ function Reset()
 		return
 	endif
 
-	execute "!./reset.sh" file
+	execute "!./scripts/reset.sh" file
 endfunction
 
 " Ctrl-P settings
