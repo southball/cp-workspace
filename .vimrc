@@ -4,7 +4,7 @@ sy on   |   im jk <esc>   |   im kj <esc>   |   no ; :
 " Select region and then type :Hash to hash your selection.
 " Useful for verifying that there aren't mistypes.
 ca Hash w !cpp -dD -P -fpreprocessed \| tr -d '[:space:]' \
- \| md5sum \| cut -c-6
+  \| md5sum \| cut -c-6
 
 " Custom options
 set autoread
@@ -12,12 +12,12 @@ set mouse=a
 
 nnoremap <C-Left> :tabprev<CR>
 nnoremap <C-Right> :tabnext<CR>
-
 nnoremap <F5> :exec Run()<CR>
 nnoremap <F6> :exec RunInteractive()<CR>
 nnoremap <F7> :exec OpenRes()<CR>
 nnoremap <C-F7> :exec CloseRes()<CR>
-nnoremap <C-F11> :exec Reset()<CR><CR>
+nnoremap <C-F10> :exec Reset()<CR><CR>
+nnoremap <C-F11> :exec ResetWorkspace()<CR><CR>
 nnoremap <F12> :!cat % \| clip.exe<CR><CR>
 
 function Run()
@@ -95,6 +95,10 @@ function Reset()
 	endif
 
 	execute "!./scripts/reset.sh" file
+endfunction
+
+function ResetWorkspace()
+	execute "!./scripts/reset_workspace.sh"
 endfunction
 
 " Ctrl-P settings

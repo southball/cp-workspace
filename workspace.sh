@@ -1,9 +1,12 @@
 #!/bin/bash
 pushd $(dirname $0)
-mkdir -p res
+source ./config.sh
 touch template.cpp
-for i in a b c d e f; do
+mkdir -p res
+files_list=""
+for i in $files; do
+	files_list+="$i.cpp "
 	touch $i.cpp res/$i.in res/$i.out res/$i.ans res/$i.log;
 done
-vim -p a.cpp b.cpp c.cpp d.cpp e.cpp f.cpp template.cpp
+vim -p $files_list template.cpp
 popd
