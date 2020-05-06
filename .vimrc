@@ -14,8 +14,9 @@ nnoremap <C-Left> :tabprev<CR>
 nnoremap <C-Right> :tabnext<CR>
 nnoremap <F5> :exec Run()<CR>
 nnoremap <F6> :exec RunInteractive()<CR>
-nnoremap <F7> :exec OpenRes()<CR>
-nnoremap <C-F7> :exec CloseRes()<CR>
+nnoremap <F7> :exec RunDebug()<CR>
+nnoremap <F8> :exec OpenRes()<CR>
+nnoremap <C-F8> :exec CloseRes()<CR>
 nnoremap <C-F10> :exec Reset()<CR><CR>
 nnoremap <C-F11> :exec ResetWorkspace()<CR><CR>
 nnoremap <F12> :!cat % \| clip.exe<CR><CR>
@@ -42,6 +43,18 @@ function RunInteractive()
 	endif
 
 	execute "!./scripts/run_interactive.sh" file
+endfunction
+
+function RunDebug()
+	let file = expand('%:t:r')
+	let extension = expand('%:e')
+
+	if extension !=? "cpp"
+		echo "The current tab is not a .cpp file."
+		return
+	endif
+
+	execute "!./scripts/run_debug.sh" file
 endfunction
 
 function OpenRes()
