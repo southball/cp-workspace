@@ -24,6 +24,7 @@ set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 " MiniBufExpl settings
 let g:miniBufExplModSelTarget = 1
+let g:miniBufExplUseSingleClick = 1
 nnoremap	<C-right>	:MBEbn<CR>
 nnoremap	<C-left>	:MBEbp<CR>
 set runtimepath^=~/.vim/bundle/minibufexpl.vim
