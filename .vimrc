@@ -21,3 +21,10 @@ let g:ctrlp_prompt_mappings = {
 	\ 'AcceptSelection("t")': ['<cr>'],
 	\ }
 set runtimepath^=~/.vim/bundle/ctrlp.vim
+
+" MiniBufExpl settings
+let g:miniBufExplMapWindowNavVim = 1
+let g:miniBufExplMapWindowNavArrows = 1
+let g:miniBufExplMapCTabSwitchBufs = 1
+let g:miniBufExplModSelTarget = 1 
+set runtimepath^=~/.vim/bundle/minibufexpl.vim
