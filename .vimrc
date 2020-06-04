@@ -16,11 +16,3 @@ let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode = 'ra'
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 
-" MiniBufExpl settings
-let g:miniBufExplModSelTarget = 1
-let g:miniBufExplUseSingleClick = 1
-let g:miniBufExplCycleArround = 1
-let g:miniBufExplBuffersNeeded = 0
-nnoremap	<C-right>	:MBEbn<CR>
-nnoremap	<C-left>	:MBEbp<CR>
-set runtimepath^=~/.vim/bundle/minibufexpl.vim
