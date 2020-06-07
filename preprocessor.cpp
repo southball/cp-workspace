@@ -181,6 +181,10 @@ void process_snippets() {
 				result_buffer += string("// Snippets inserted: ") + join(requirements, ", ") + '\n';
 				result_buffer += snippet_buffer;
 				snippet_buffer = "";
+			} else {
+				cerr << "Unknown directive on line " << line_count << "." << endl;
+				cerr << "Line content: " << line << endl;
+				exit(1);
 			}
 		} else {
 			result_buffer += line + '\n';
