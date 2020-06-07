@@ -1,12 +1,20 @@
 kactl
 
-*.cpp
 *.out
 *.in
 
 a
+a.cpp
 b
+b.cpp
 c
+c.cpp
 d
+d.cpp
 e
+e.cpp
 f
+f.cpp
+
+# Compiled artifacts
+preprocessor
