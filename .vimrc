@@ -8,6 +8,7 @@ ca Hash w !cpp -dD -P -fpreprocessed \| tr -d '[:space:]' \
 
 " Custom options
 set mouse=a autoread
+set backspace=2
 nnoremap <F12> :!cat % \| clip.exe<CR><CR>
 
 " Ctrl-P settings
@@ -16,3 +17,7 @@ let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode = 'ra'
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 
+" Cursor
+let &t_SI.="\e[5 q" "SI = INSERT mode
+let &t_SR.="\e[5 q" "SR = REPLACE mode
+let &t_EI.="\e[5 q" "EI = NORMAL mode (ELSE)
