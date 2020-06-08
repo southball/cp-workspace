@@ -51,32 +51,34 @@ struct Mod {
 		if (0 <= xx && xx < MOD) val = xx;
 		else val = (xx % MOD + MOD) % MOD;
 	}
-	Mod operator+(Mod b) { return Mod((val + b.val) % MOD); }
-	Mod operator-(Mod b) { return Mod((val - b.val + MOD) % MOD); }
-	Mod operator*(Mod b) { return Mod((val * b.val) % MOD); }
-	Mod operator/(Mod b) { return *this * invert(b); }
-	Mod operator+=(Mod b) { *this = *this + b; return *this; }
-	Mod operator-=(Mod b) { *this = *this - b; return *this; }
-	Mod operator*=(Mod b) { *this = *this * b; return *this; }
-	Mod operator/=(Mod b) { *this = *this / b; return *this; }
+	Mod operator+=(Mod b) { if ((val += b.val) >= MOD) val -= MOD; return *this; }
+	Mod operator-=(Mod b) { if ((val += MOD - b.val) >= MOD) val -= MOD; return *this; }
+	Mod operator*=(Mod b) { (val *= b.val) %= MOD; return *this; }
+	Mod operator/=(Mod b) { (val *= b.inv().val) %= MOD; return *this; }
+	Mod operator+(Mod b) const { Mod<MOD> tmp(*this); return tmp += b; }
+	Mod operator-(Mod b) const { Mod<MOD> tmp(*this); return tmp -= b; }
+	Mod operator*(Mod b) const { Mod<MOD> tmp(*this); return tmp *= b; }
+	Mod operator/(Mod b) const { Mod<MOD> tmp(*this); return tmp /= b; }
 	Mod& operator++() { *this += 1; return *this; }
 	Mod& operator--() { *this -= 1; return *this; }
 	Mod operator++(int) { Mod<MOD> tmp(*this); operator++(); return tmp; }
 	Mod operator--(int) { Mod<MOD> tmp(*this); operator--(); return tmp; }
-	Mod invert(Mod a) {
-		ll val, y, g = euclid(a.val, MOD, val, y);
-		assert(g == 1); return Mod((val + MOD) % MOD);
+	Mod inv() const {
+		ll v, y, g = euclid(val, MOD, v, y);
+		assert(g == 1); return Mod((v + MOD) % MOD);
 	}
-	Mod operator^(ll e) {
-		if (!e) return Mod(1);
-		Mod r = *this ^ (e / 2); r = r * r;
-		return e&1 ? *this * r : r;
+	Mod operator^(ll p) const {
+		ll r = 1, b = val;
+		for (; p; p >>= 1, b = b * b % MOD) if (p & 1) r = r * b % MOD;
+		return Mod(r);
 	}
 	friend istream& operator>>(istream &is, Mod& mod) {
-		is >> mod.val; mod.val = (mod.val % MOD + MOD) % MOD; return is;
+		ll tmp; is >> tmp;
+		mod = Mod<MOD>(tmp);
+		return is;
 	}
 	friend ostream& operator<<(ostream &os, const Mod& mod) {
-		os << mod.val; return os;
+		return os << mod.val;
 	}
 };
 //! end modint
