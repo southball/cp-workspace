@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cctype>
 #include <cstdlib>
 #include <fstream>
 #include <vector>
@@ -29,20 +30,15 @@ string snippet_buffer;
 string result_buffer;
 
 // functions
-
-bool starts_with(string haystack, string needle) {
-	return haystack.substr(0, needle.size()) == needle;
-}
-
 string lstrip(string str) {
 	for (string::iterator it = str.begin(); it != str.end(); it++)
-		if (*it != ' ')
+		if (!isspace(*it))
 			return string(it, str.end());
 	return "";
 }
 
 string rstrip(string str) {
-	while (str.size() && str.back() == ' ')
+	while (str.size() && isspace(str.back()))
 		str.pop_back();
 	return str;
 }
@@ -51,9 +47,13 @@ string strip(string str) {
 	return lstrip(rstrip(str));
 }
 
+bool starts_with_lstrip(string haystack, string needle) {
+	return lstrip(haystack).substr(0, needle.size()) == needle;
+}
+
 string remove_prefix(string str, string prefix) {
-	assert(str.substr(0, prefix.length()) == prefix);
-	return str.substr(prefix.length());
+	assert(starts_with_lstrip(str, prefix));
+	return lstrip(str).substr(prefix.size());
 }
 
 void read_file(string &file, string filename) {
@@ -76,19 +76,19 @@ void read_snippets(string filename) {
 	while (getline(content_ss, line)) {
 		line_count++;
 
-		if (starts_with(line, "//!")) {
+		if (starts_with_lstrip(line, "//!")) {
 			// process directive
 			string directive = lstrip(remove_prefix(line, "//!"));
-			if (starts_with(directive, "snippet")) {
+			if (starts_with_lstrip(directive, "snippet")) {
 				assert(!in_snip);
 				in_snip = true;
 				string id = strip(remove_prefix(directive, "snippet"));
 				snip = snippet(id);
-			} else if (starts_with(directive, "require")) {
+			} else if (starts_with_lstrip(directive, "use")) {
 				assert(in_snip);
-				string dependency = strip(remove_prefix(directive, "require"));
-				snip.dependencies.push_back(dependency);
-			} else if (starts_with(directive, "end")) {
+				string dependency = strip(remove_prefix(directive, "use"));
+				snip.dependencies.push_back(strip(dependency));
+			} else if (starts_with_lstrip(directive, "end")) {
 				assert(in_snip);
 				in_snip = false;
 				assert(snippets.find(snip.id) == snippets.end());
@@ -96,6 +96,7 @@ void read_snippets(string filename) {
 			} else {
 				cerr << "Unknown directive on line " << line_count << "." << endl;
 				cerr << "Line content: " << line << endl;
+				cerr << "Directive content: " << directive << endl;
 				exit(1);
 			}
 		} else {
@@ -109,6 +110,8 @@ void read_snippets(string filename) {
 }
 
 void ensure_snippet(string id) {
+	cerr << "Ensure snippet " << id << " is loaded." << endl;
+
 	if (inserted_snippets.find(id) != inserted_snippets.end())
 		return;
 
@@ -124,7 +127,7 @@ void ensure_snippet(string id) {
 	for (string dependency : snip.dependencies)
 		ensure_snippet(dependency);
 
-	snippet_buffer += snip.content + '\n';
+	snippet_buffer += snip.content;
 
 	// Successfully inserted snippet.
 	inserting_snippets.erase(id);
@@ -166,21 +169,22 @@ void process_snippets() {
 	while (getline(source_ss, line)) {
 		line_count++;
 
-		if (starts_with(line, "//!")) {
+		if (starts_with_lstrip(line, "//!")) {
 			string directive = lstrip(remove_prefix(line, "//!"));
-			if (starts_with(directive, "use")) {
+			cerr << "Processing directive in source file: " << directive << endl;
+			if (starts_with_lstrip(directive, "use")) {
 				string requirement;
 				stringstream requirements_ss(strip(remove_prefix(directive, "use")));
 				vector<string> requirements;
 
+				cerr << "Requirements: " << directive << endl;
 				while (getline(requirements_ss, requirement, ','))
-					requirements.push_back(requirement);
+					requirements.push_back(strip(requirement));
 				for (string requirement : requirements)
 					ensure_snippet(requirement);
-
-				result_buffer += string("// Snippets inserted: ") + join(requirements, ", ") + '\n';
-				result_buffer += snippet_buffer;
-				snippet_buffer = "";
+			} else if (starts_with_lstrip(directive, "snippet-holder")) {
+				// This is to be handled in the second pass.
+				result_buffer += line + '\n';
 			} else {
 				cerr << "Unknown directive on line " << line_count << "." << endl;
 				cerr << "Line content: " << line << endl;
@@ -189,6 +193,48 @@ void process_snippets() {
 		} else {
 			result_buffer += line + '\n';
 		}
+	}
+}
+
+void insert_snippets() {
+	string source = result_buffer;
+	string line;
+	stringstream source_ss(source);
+
+	result_buffer.clear();
+
+	int line_count = 0;
+	bool snippets_inserted = false;
+
+	while (getline(source_ss, line)) {
+		line_count++;
+
+		if (starts_with_lstrip(line, "//!")) {
+			string directive = strip(line.substr(3));
+			if (starts_with_lstrip(directive, "snippet-holder")) {
+				if (!snippets_inserted) {
+					if (inserted_snippets.size()) {
+						vector<string> snippets_list(inserted_snippets.begin(), inserted_snippets.end());
+						result_buffer += string("// Inserted snippets: ") + join(snippets_list, ", ") + '\n';
+						result_buffer += snippet_buffer;
+						result_buffer += "// End snippets\n";
+					} else {
+						result_buffer += "// No snippets inserted.\n";
+					}
+					snippets_inserted = true;
+				} else {
+					cerr << "Error: multiple snippet holders defined." << endl;
+					exit(1);
+				}
+			}
+		} else {
+			result_buffer += line + '\n';
+		}
+	}
+
+	if (!inserted_snippets.empty() && !snippets_inserted) {
+		cerr << "Error: snippets requested but no holder defined." << endl;
+		exit(1);
 	}
 }
 
@@ -202,6 +248,7 @@ int main(int argc, char **argv) {
 	read_snippets("snippets.cpp");
 	//print_snippets_info();
 	process_snippets();
-	
+	insert_snippets();
+
 	cout << result_buffer;
 }

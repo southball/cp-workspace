@@ -1,4 +1,8 @@
-CPP = g++ -Wall -Wconversion -Wfatal-errors -g -std=c++14 -fsanitize=undefined,address -O2
+CPP = g++ -Wall -Wconversion -Wfatal-errors -g -std=c++14 -fsanitize=undefined,address
 
-%: %.cpp
+%: %.cpp snippets.cpp
+	./preprocessor $@.cpp > /tmp/$@.proc.cpp
+	$(CPP) -O2 -o$@ /tmp/$@.proc.cpp
+
+preprocessor: preprocessor.cpp
 	$(CPP) -o$@ $<
