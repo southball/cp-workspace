@@ -1,2 +1,4 @@
 #!/bin/bash
-cat template.cpp > $1;
+for var in "$@"; do
+	cat template.cpp > $var;
+done
