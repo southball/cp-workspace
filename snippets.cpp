@@ -43,7 +43,7 @@ ll euclid(ll a, ll b, ll &x, ll &y) {
 //! snippet modint
 //! use root
 //! use euclid
-template<ll MOD = 1000000007>
+template<ll MOD = 1'000'000'007>
 struct Mod {
 	ll val;
 	Mod() : val(0) {}
@@ -84,7 +84,7 @@ struct Mod {
 //! snippet ncr
 //! use root
 //! use modint
-template<ll MOD = 1000000007>
+template<ll MOD = 1'000'000'007>
 struct NCR {
 	int size;
 	vector<Mod<MOD>> fact;
