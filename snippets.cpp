@@ -273,7 +273,6 @@ T lower_bound_on(T first, T last, const U& value, const function<U(T)>& fn) {
 	}
 	return first;
 }
-
 template<class T, class U>
 T upper_bound_on(T first, T last, const U& value, const function<U(T)>& fn) {
 	T it, step, count = last - first;
