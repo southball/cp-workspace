@@ -9,7 +9,8 @@ ca Hash w !cpp -dD -P -fpreprocessed \| tr -d '[:space:]' \
 " Custom options
 set mouse=a autoread
 set backspace=2
-nnoremap <F12> :!cat % \| clip.exe<CR>
+nnoremap <F12> :echo system("./clip " . expand("%:t:r"))<CR>
+nnoremap <C-F12> :!cat % \| clip.exe<CR>
 
 " Ctrl-P settings
 let g:ctrlp_map = '<c-p>'
