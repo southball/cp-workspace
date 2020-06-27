@@ -1,0 +1,3 @@
+#!/bin/bash
+make proc/$1.cpp
+cat proc/$1.cpp | clip.exe

@@ -3,6 +3,7 @@ kactl/
 bits/
 src/
 target/
+proc/
 
 *.swp
 *.out
