@@ -245,13 +245,13 @@ void insert_snippets() {
 }
 
 int main(int argc, char **argv) {
-	if (argc < 2) {
-		eprintf("[ERROR] File name is not provided.\n");
+	if (argc < 3) {
+		eprintf("[ERROR] File name and snippets source is not provided.\n");
 		exit(1);
 	}
 
 	read_file(source_file, argv[1]);
-	read_snippets("snippets.cpp");
+	read_snippets(argv[2]);
 	//print_snippets_info();
 	process_snippets();
 	insert_snippets();

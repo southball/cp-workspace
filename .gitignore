@@ -1,29 +1,9 @@
-.vscode
-kactl
-bits
+.vscode/
+kactl/
+bits/
+src/
+target/
 
 *.swp
 *.out
 *.in
-
-a
-a.cpp
-a.proc.cpp
-b
-b.cpp
-b.proc.cpp
-c
-c.cpp
-c.proc.cpp
-d
-d.cpp
-d.proc.cpp
-e
-e.cpp
-e.proc.cpp
-f
-f.cpp
-f.proc.cpp
-
-# Compiled artifacts
-preprocessor

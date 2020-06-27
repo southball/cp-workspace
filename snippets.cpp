@@ -285,4 +285,4 @@ T upper_bound_on(T first, T last, const U& value, const function<U(T)>& fn) {
 	}
 	return first;
 }
-//! end
+//! end bs
