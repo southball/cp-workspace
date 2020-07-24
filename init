@@ -1,5 +1,6 @@
 #!/bin/bash
 SOURCE="a.cpp b.cpp c.cpp d.cpp e.cpp f.cpp g.cpp h.cpp i.cpp"
+rm -rf ./src
 mkdir -p ./src
 for var in $SOURCE; do
 	cat template.cpp > "./src/$var";
