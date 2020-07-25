@@ -4,6 +4,7 @@ ca Hash w !cpp -dD -P -fpreprocessed \| tr -d '[:space:]' \
   \| md5sum \| cut -c-6
 
 nnoremap <F9> :execute '!./clip ' . expand('%:t:r')<CR>
+nnoremap <F10> :execute 'vsplit \| term ./run ' . expand('%:t:r')<CR>i
 
 " Disable ALE for C++ temporarily.
 autocmd BufNew,BufEnter *.cpp execute "silent! ALEDisableBuffer"
@@ -12,4 +13,4 @@ autocmd BufNew,BufEnter *.cpp execute "silent! ALEDisableBuffer"
 source ~/.config/nvim/init.vim
 
 " Commands for workspace.
-command Reset %! cat < template.cpp
+command! Reset %! cat < template.cpp
