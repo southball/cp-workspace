@@ -10,3 +10,6 @@ autocmd BufNew,BufEnter *.cpp execute "silent! ALEDisableBuffer"
 
 " Load original .vimrc
 source ~/.config/nvim/init.vim
+
+" Commands for workspace.
+command Reset %! cat < template.cpp

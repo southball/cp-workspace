@@ -1,8 +1,6 @@
-#include "bits/stdc++.h"
+#include "template/root.h"
+#include "template/io.h"
 using namespace std;
-
-//! snippet-holder
-//! use io, root
 
 int main() {
 	cin.tie(0)->sync_with_stdio(0);

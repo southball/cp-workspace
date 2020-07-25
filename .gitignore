@@ -1,9 +1,11 @@
 .vscode/
 kactl/
 bits/
-src/
 target/
 proc/
+
+src/*
+!src/template/
 
 *.swp
 *.out
