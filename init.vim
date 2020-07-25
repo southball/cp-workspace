@@ -6,9 +6,6 @@ ca Hash w !cpp -dD -P -fpreprocessed \| tr -d '[:space:]' \
 nnoremap <F9> :execute '!./clip ' . expand('%:t:r')<CR>
 nnoremap <F10> :execute 'vsplit \| term ./run ' . expand('%:t:r')<CR>i
 
-" Disable ALE for C++ temporarily.
-autocmd BufNew,BufEnter *.cpp execute "silent! ALEDisableBuffer"
-
 " Load original .vimrc
 source ~/.config/nvim/init.vim
 
