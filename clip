@@ -1,0 +1,3 @@
+#!/bin/bash
+make tools/preprocessor
+./tools/preprocessor ./src/$1.cpp | clip.exe

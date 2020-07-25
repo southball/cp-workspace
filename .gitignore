@@ -3,6 +3,7 @@ kactl/
 bits/
 target/
 proc/
+tools/preprocessor
 
 src/*
 !src/template/
