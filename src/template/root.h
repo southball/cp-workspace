@@ -5,6 +5,9 @@
 using namespace std;
 
 #define rep(i, a, b) for(int i = a; i < (b); ++i)
+#define repl(i, a, b) for(ll i = a; i < (b); ++i)
+#define repd(i, a, b) for(int i = b; i >= (a); --i)
+#define repdl(i, a, b) for(ll i = b; i >= (a); --i)
 #define all(x) begin(x), end(x)
 #define sz(x) (int)(x).size()
 typedef long long ll;
