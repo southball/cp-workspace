@@ -1,6 +1,8 @@
 #ifndef _TEMPLATE_IO
 #define _TEMPLATE_IO
 
+#include "root.h"
+
 template<typename H> void read(H& head) { cin >> head; }
 template<typename H, typename ...T> void read(H& head, T& ...tail) { cin >> head; read(tail...); }
 template<typename H> void write(H head) { cout << head << '\n'; }

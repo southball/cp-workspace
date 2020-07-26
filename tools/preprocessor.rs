@@ -15,11 +15,13 @@ fn get_include(line: &str) -> Option<&str> {
 }
 
 fn process(filename: &Path, template_folder: &Path, included_paths: &mut HashSet<String>) -> Option<Vec<String>> {
-    eprintln!("Processing file: {:?}", filename);
+    let is_template = filename.starts_with(template_folder);
+    eprintln!("Processing file: {:?} (template: {:?})", filename, is_template);
 
     if let Ok(content) = std::fs::read_to_string(filename) {
         content
             .split('\n')
+            .filter(|line: &&str| !is_template || line.trim().len() > 0)
             .map(|line: &str| {
                 let line = line.to_owned();
                 if let Some(template_name) = get_include(&line) {
@@ -41,7 +43,10 @@ fn process(filename: &Path, template_folder: &Path, included_paths: &mut HashSet
                         .expect("Failed to turn path to string.")
                         .to_owned();
 
-                    if template_path.starts_with(template_folder) && !included_paths.contains(&full_path) {
+                    if included_paths.contains(&full_path) {
+                        eprintln!("{:?}: \"{}\" is already included", filename, template_name);
+                        vec![]
+                    } else if template_path.starts_with(template_folder) {
                         included_paths.insert(full_path);
                         process(&template_path, template_folder, included_paths)
                             .unwrap_or(vec![line])
@@ -52,7 +57,7 @@ fn process(filename: &Path, template_folder: &Path, included_paths: &mut HashSet
                     vec![line]
                 }
             })
-        .map(|lines: Vec<String>| lines.join("\n"))
+            .map(|lines: Vec<String>| lines.join("\n"))
             .collect::<Vec<String>>()
             .into()
     } else {
