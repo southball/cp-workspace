@@ -3,6 +3,8 @@
 
 #include "root.h"
 
+// Important: when passing the fn, cast it to function<U(T)> manually.
+
 template<class T, class U>
 T lower_bound_on(T first, T last, const U& value, const function<U(T)>& fn) {
 	T it, step, count = last - first;
